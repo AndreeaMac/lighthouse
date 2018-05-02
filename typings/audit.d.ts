@@ -76,7 +76,8 @@ declare global {
     }
 
     export type DetailsItem = string | number | DetailsRendererNodeDetailsJSON |
-      DetailsRendererLinkDetailsJSON | DetailsRendererCodeDetailJSON;
+      DetailsRendererLinkDetailsJSON | DetailsRendererCodeDetailJSON | undefined |
+      boolean;
 
     export interface DetailsRendererNodeDetailsJSON {
       type: 'node';
@@ -125,6 +126,19 @@ declare global {
 
     export interface Results {
       [metric: string]: Result;
+    }
+
+    export type SimpleCriticalRequestNode = {
+      [id: string]: {
+        request: {
+          url: string;
+          startTime: number;
+          endTime: number;
+          _responseReceivedTime: number;
+          transferSize: number;
+        };
+        children: SimpleCriticalRequestNode;
+      }
     }
   }
 }

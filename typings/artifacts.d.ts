@@ -99,7 +99,8 @@ declare global {
     }
 
     export interface ComputedArtifacts {
-      requestDevtoolsTimelineModel(trace: Trace): Promise<{filmStripModel(): Artifacts.DevtoolsTimelineFilmStripModel}>;
+      requestCriticalRequestChains(data: {devtoolsLog: DevtoolsLog, URL: Artifacts['URL']}): Promise<Artifacts.CriticalRequestNode>;
+      requestDevtoolsTimelineModel(trace: Trace): Promise<Artifacts.DevtoolsTimelineModel>;
       requestLoadSimulator(data: {devtoolsLog: DevtoolsLog, settings: Config.Settings}): Promise<LanternSimulator>;
       requestMainResource(data: {devtoolsLog: DevtoolsLog, URL: Artifacts['URL']}): Promise<WebInspector.NetworkRequest>;
       requestManifestValues(manifest: LH.Artifacts['Manifest']): Promise<LH.Artifacts.ManifestValues>;
@@ -278,6 +279,19 @@ declare global {
         }>;
       }
 
+      export interface DevtoolsTimelineModelNode {
+        children: Map<string, DevtoolsTimelineModelNode>;
+        selfTime: number;
+        event: {
+          name: string;
+        };
+      }
+
+      export interface DevtoolsTimelineModel {
+        filmStripModel(): Artifacts.DevtoolsTimelineFilmStripModel;
+        bottomUpGroupBy(grouping: string): DevtoolsTimelineModelNode;
+      }
+
       export interface ManifestValues {
         isParseFailure: boolean;
         parseFailureReason: string | undefined;
@@ -314,6 +328,7 @@ declare global {
 
       export interface LanternMetric {
         timing: number;
+        timestamp?: never;
         optimisticEstimate: Gatherer.Simulation.Result
         pessimisticEstimate: Gatherer.Simulation.Result;
         optimisticGraph: Gatherer.Simulation.GraphNode;

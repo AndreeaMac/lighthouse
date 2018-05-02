@@ -92,7 +92,7 @@ class TimelineModel {
   }
 
   /**
-   * @param  {!string} grouping Allowed values: None Category Subdomain Domain URL EventName
+   * @param {string} grouping Allowed values: None Category Subdomain Domain URL EventName
    */
   bottomUpGroupBy(grouping) {
     const topDown = this.topDown();
